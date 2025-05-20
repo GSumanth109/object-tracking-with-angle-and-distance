@@ -1,1 +1,7 @@
-# object-tracking-with-angle-and-distance
+This project focuses on tracking an object (In this case, my face) using depth mapping. I have used the Depth Anything v2 model to perform depth mapping on my computer. Depth Anything V2 inherently does not process live camera feed, so the code includes a snippet that uploads frame by frame from the live camera feed directly to the model. 
+I have used the VITL model ( the large model available on their GitHub or Huggingface). If using live camera feed, it is highly suggested to use GPU acceleration using CUDA, as the CPU-based model is not able to consistently provide more than 2 Frames Per Second. I ran it on my RTX 4070 Ti super with 25 FPS on average. I also streamed the camera feed on IP with my phone as the camera.
+To use this code, download the Depth Anything v2 model and set it up as mentioned on their GitHub repository. Also, install the media pipe library through your bash. Also, install OpenCV if it was not obvious.
+
+
+This program uses Haar cascades to recognise your face, and the depth map tracks the distance, horizontal, and vertical angle between the camera and the center of the object. My idea was to develop this program to send these coordinates to a microcontroller that controls a robotic arm, which can then be used to move the camera (serving as a gimbal). However, due to budget constraints, I cannot own a robotic arm.
+To use the camera feed through IP, modify the IP address in the code and use an IP camera streaming app on your phone (In my case, it was IP Webcam).
