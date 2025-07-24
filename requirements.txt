@@ -1,0 +1,10 @@
+torch
+torchvision
+opencv-python
+mediapipe
+numpy
+requests
+Pillow
+gradio==4.29.0
+gradio_imageslider
+matplotlib
