@@ -1,7 +1,58 @@
-This project focuses on tracking an object (In this case, my face) using depth mapping. I have used the Depth Anything v2 model to perform depth mapping on my computer. Depth Anything V2 inherently does not process live camera feed, so the code includes a snippet that uploads frame by frame from the live camera feed directly to the model. 
-I have used the VITL model ( the large model available on their GitHub or Huggingface). If using live camera feed, it is highly suggested to use GPU acceleration using CUDA, as the CPU-based model is not able to consistently provide more than 2 Frames Per Second. I ran it on my RTX 4070 Ti super with 25 FPS on average. I also streamed the camera feed on IP with my phone as the camera.
-To use this code, download the Depth Anything v2 model and set it up as mentioned on their GitHub repository. Also, install the media pipe library through your bash. Also, install OpenCV if it was not obvious.
+# 📌 Object Tracking with Angle and Distance using Depth Anything V2
 
+This is a **proof-of-concept project** that estimates the **distance** and **angle** of a detected human face in real-time using:
 
-This program uses Haar cascades to recognise your face, and the depth map tracks the distance, horizontal, and vertical angle between the camera and the center of the object. My idea was to develop this program to send these coordinates to a microcontroller that controls a robotic arm, which can then be used to move the camera (serving as a gimbal). However, due to budget constraints, I cannot own a robotic arm.
-To use the camera feed through IP, modify the IP address in the code and use an IP camera streaming app on your phone (In my case, it was IP Webcam).
+- [MediaPipe Face Detection](https://developers.google.com/mediapipe/solutions/vision/face_detection)
+- [Depth Anything V2](https://github.com/isl-org/Depth-Anything/tree/main/depth_anything_v2)
+
+It combines **depth estimation** and **facial detection** to infer the 3D position of a person from a monocular camera feed. The distance is **not directly measured**, but is inferred using a custom **exponential mapping** function based on prior observations.
+
+---
+
+## ⚙️ Features
+
+- Real-time face detection using MediaPipe
+- Distance estimation using a smoothed exponential function on raw depth values
+- Horizontal and vertical angle estimation from face center
+- Compatible with both IP cameras and USB webcams
+- Frame saving to disk every 10 frames
+- Logging of raw depth vs known distance for future curve fitting
+
+---
+
+## 🖥️ Hardware & Setup Requirements
+
+- IP camera with snapshot URL or a USB webcam
+- Python 3.8+ (run inside a Conda environment recommended)
+- CUDA-capable GPU (for real-time performance)
+- Internet access (if using IP cam)
+- Depth Anything V2 model checkpoint
+
+---
+
+## 🚀 Performance Notes
+
+- Tested on a machine with **RTX 4070 Ti Super**, achieving **20–25 FPS** at 1080p.
+- The model can run on CPU, but frame rate will drop significantly (slow enough to hinder real-time tracking).
+- GPU acceleration via **CUDA** is **strongly recommended** for acceptable performance.
+
+---
+
+## 🧪 Execution Disclaimer
+
+The system works correctly, but **output images are not included** due to unavailability of the original camera hardware used during development.
+
+All code remains executable and reproducible if you provide your own IP/webcam input and the required model checkpoint.
+
+---
+
+## 🛠️ Setup Instructions
+
+### 1. Clone the repository & set up environment
+
+```bash
+git clone https://github.com/GSumanth109/object-tracking-with-angle-and-distance.git
+cd object-tracking-with-angle-and-distance
+conda create -n depthtrack python=3.9
+conda activate depthtrack
+pip install -r requirements.txt
